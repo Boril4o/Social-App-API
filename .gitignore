@@ -350,4 +350,4 @@ MigrationBackup/
 .ionide/
 
 #Project connection string
-**/Social-App-API\SocialAppAPI\SocialAppAPI\appsettings.json
+/Social-App-API/SocialAppAPI/SocialAppAPI/appsettings.json
