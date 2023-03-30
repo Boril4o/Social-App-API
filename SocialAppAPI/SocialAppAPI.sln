@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33424.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialAppAPI", "SocialAppAPI\SocialAppAPI.csproj", "{63EA937F-657A-4F11-8B48-587A3F4DB5A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialApp.infrastructure", "SocialApp.infrastructure\SocialApp.infrastructure.csproj", "{7715F934-DA0E-4BF4-94CE-A82DB3750699}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63EA937F-657A-4F11-8B48-587A3F4DB5A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63EA937F-657A-4F11-8B48-587A3F4DB5A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63EA937F-657A-4F11-8B48-587A3F4DB5A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63EA937F-657A-4F11-8B48-587A3F4DB5A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7715F934-DA0E-4BF4-94CE-A82DB3750699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7715F934-DA0E-4BF4-94CE-A82DB3750699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7715F934-DA0E-4BF4-94CE-A82DB3750699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7715F934-DA0E-4BF4-94CE-A82DB3750699}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D7E6F1E6-1462-426A-926C-86BB0598ECC9}
+	EndGlobalSection
+EndGlobal
