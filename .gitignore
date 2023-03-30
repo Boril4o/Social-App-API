@@ -351,3 +351,4 @@ MigrationBackup/
 
 #Project connection string
 /Social-App-API/SocialAppAPI/SocialAppAPI/appsettings.json
+*.json
