@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using static SocialApp.infrastructure.Data.Constants.DataConstants;
 
 namespace SocialApp.infrastructure.Data.Entities
 {
-    public class User : BaseEntity
+    public class User : IdentityUser
     {
         public User()
         {
@@ -15,11 +17,7 @@ namespace SocialApp.infrastructure.Data.Entities
 
         [Required]
         [MaxLength(UsernameMaxLength)]
-        public string Username { get; set; } = null!;
-
-        [Required]
-        [MaxLength(PasswordMaxLength)]
-        public string Password { get; set; } = null!;
+        override public string? UserName { get; set; } = null!;
 
         [Required]
         public byte[] ProfilePicture { get; set; } = null!;

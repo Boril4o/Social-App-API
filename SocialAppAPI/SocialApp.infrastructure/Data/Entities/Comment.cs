@@ -17,7 +17,7 @@ namespace SocialApp.infrastructure.Data.Entities
 
         [Required]
         [ForeignKey(nameof(Owner))]
-        public Guid OwnerId { get; set; }
+        public string OwnerId { get; set; } = null!;
         public User Owner { get; set; } = null!;
 
         [Required]

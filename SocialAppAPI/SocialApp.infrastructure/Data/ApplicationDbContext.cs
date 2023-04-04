@@ -1,14 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SocialApp.infrastructure.Data.Entities;
 
 namespace SocialApp.infrastructure.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
             : base(options) { }
 
-        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<User> Members { get; set; } = null!;
 
         public DbSet<Comment> Comments { get; set; } = null!;
 
@@ -40,7 +41,11 @@ namespace SocialApp.infrastructure.Data
                 .WithMany(u => u.LikedComments)
                 .HasForeignKey(c => c.OwnerId)
                 .OnDelete(DeleteBehavior.Restrict);
-                
+
+            modelBuilder
+                .Entity<User>()
+                .HasIndex(u => u.UserName)
+                .IsUnique(true);
 
             base.OnModelCreating(modelBuilder);
         }
