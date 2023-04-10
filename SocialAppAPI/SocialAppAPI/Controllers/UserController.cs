@@ -48,7 +48,7 @@ namespace SocialAppAPI.Controllers
             // If the user does not exist, return an error response with a status code of 401 (Unauthorized).
             if (user == null)
             {
-                return Problem(string.Format(UserIdDoesNotExist, id), statusCode: 401);
+                return Unauthorized(string.Format(UserIdDoesNotExist, id));
             }
 
             // Return an HTTP response containing the user object as a JSON payload.
@@ -86,7 +86,7 @@ namespace SocialAppAPI.Controllers
             // If the user does not exist, return an error response with a status code of 401 (Unauthorized).
             if (user == null)
             {
-                return Problem(string.Format(UserIdDoesNotExist, username), statusCode: 401);
+                return Unauthorized(string.Format(UserIdDoesNotExist, username));
             }
 
             // Return an HTTP response containing the user object as a JSON payload.
@@ -115,7 +115,7 @@ namespace SocialAppAPI.Controllers
             // If the user is not found, return an HTTP 401 status code with a message.
             if (user == null)
             {
-                return Problem(string.Format(UserIdDoesNotExist, id), statusCode: 401);
+                return Unauthorized(string.Format(UserIdDoesNotExist, id));
             }
 
             // Check if the modified username already exists in the database for any user other than the one being modified.
@@ -162,7 +162,7 @@ namespace SocialAppAPI.Controllers
             // If the user does not exist, return an HTTP 401 status code with an error message
             if (user == null)
             {
-                return Problem(string.Format(UserIdDoesNotExist, id), statusCode: 401);
+                return Unauthorized(string.Format(UserIdDoesNotExist, id));
             }
 
             try
@@ -183,8 +183,7 @@ namespace SocialAppAPI.Controllers
             {
                 // If an exception occurs during the deletion process,
                 // return an HTTP 500 status code with an error message
-                var message = new ErrorModel(Error, ex.Message).ToString();
-                return Problem(message, statusCode: 500);
+                return Problem(ex.Message, statusCode: 500);
             }
 
             // Return an HTTP 200 status code with the deleted user object in the response body

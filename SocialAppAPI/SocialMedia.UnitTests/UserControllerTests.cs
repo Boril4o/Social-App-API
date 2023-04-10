@@ -1,54 +1,85 @@
-using Castle.Components.DictionaryAdapter.Xml;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Moq;
-using SocialApp.infrastructure.Data.Entities;
+using SocialApp.infrastructure.Data;
 using SocialAppAPI.Controllers;
-using SocialAppAPI.Models.User;
+using static SocialAppAPI.Responses.ResponseMessages;
+using SocialApp.infrastructure.Data.Entities;
 
 namespace SocialMediaApp.UnitTests
 {
     [TestFixture]
     public class UserControllerTests
     {
-        private Mock<UserManager<User>> userManager = null!;
-        private Mock<SignInManager<User>> signInManager = null!;
-        private AccountController userController = null!;
+        private UserController userController = null!;
+        private ApplicationDbContext context = null!;
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
-            userManager = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(),
-             null, null, null, null, null, null, null, null);
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "Db")
+                .Options;
 
-            //var a = new SignInManager<User>(userManager.Object, new Mock<IHttpContextAccessor>().Object, new Mock<IUserClaimsPrincipalFactory<User>>().Object, new Mock<IOptions<IdentityOptions>>().Object, new Mock<ILogger<SignInManager<User>>>().Object, new Mock<IAuthenticationSchemeProvider>().Object, new Mock<IUserConfirmation<User>>().Object);
+            context = new ApplicationDbContext(options);
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
 
-            signInManager = new Mock<SignInManager<User>>(userManager.Object, new Mock<IHttpContextAccessor>().Object, new Mock<IUserClaimsPrincipalFactory<User>>().Object, new Mock<IOptions<IdentityOptions>>().Object, new Mock<ILogger<SignInManager<User>>>().Object, new Mock<IAuthenticationSchemeProvider>().Object, new Mock<IUserConfirmation<User>>().Object);
-
-            userController = new (signInManager.Object, userManager.Object);
+            userController = new UserController(context);
         }
 
         [Test]
-        public async Task When_RegisterModel_Is_Invalid_Should_Return_BadRequest()
+        public async Task When_Executing_The_GetUserById_Method_If_User_Does_Not_Exist_Should_Return_Unauthorized()
         {
-            // Arrange
-            var userDto = new UserRegisterDto
-            {
-                Username = "",
-                Password = ""
-            };
-
-            userController.ModelState.AddModelError("Username", "The Username field is required.");
+            //Arrange
+            const string id = "something";
+            var expectedMessage = string.Format(UserIdDoesNotExist, id);
 
             //Act
-            var result = await userController.Register(userDto);
+            var result = await userController.GetUserById(id);
 
             //Assert
-            Assert.IsInstanceOf<BadRequestObjectResult>(result, "API did not return BadRequest");
+            Assert.IsInstanceOf<UnauthorizedObjectResult>(result,
+                $"Response should be of type {nameof(UnauthorizedObjectResult)}" +
+                $" but was {result.GetType().Name}");
+
+            var message = ((UnauthorizedObjectResult)result).Value?.ToString();
+            Assert.That(expectedMessage == message,
+                $"Response message should be {expectedMessage} but was {message}");
+        }
+
+        [Test]
+        public async Task When_GetUserById_Method_Is_Successful_Should_Return_Ok_Response_With_User()
+        {
+            const string firstUserName = "Test";
+            const string firstId = "id";
+            const string secondUserName = "Test1";
+            const string secondId = "id123";
+
+            //Arrange
+            var User = new User()
+            {
+                UserName = firstUserName,
+                Id = firstId,
+                ProfilePicture = new byte[2]
+            };
+
+            var User1 = new User()
+            {
+                UserName = secondUserName,
+                Id = secondId,
+                ProfilePicture = new byte[2]
+            };
+
+            await context.Users.AddRangeAsync(User, User1);
+            await context.SaveChangesAsync();
+
+            //Act
+            var firstResult = await userController.GetUserById(firstId);
+            var secondResult = await userController.GetUserById(secondId);
+
+            Assert.IsInstanceOf<OkObjectResult>(firstResult);
+            Assert.IsInstanceOf<OkObjectResult>(secondResult);
         }
     }
 }

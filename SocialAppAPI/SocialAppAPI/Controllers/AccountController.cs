@@ -56,8 +56,7 @@ namespace SocialAppAPI.Controllers
             catch (Exception ex)
             {
                 // If an exception occurs, log the error and return a Problem response
-                var message = new ErrorModel(Error, ex.Message).ToString();
-                return Problem(message,
+                return Problem(ex.Message,
                     statusCode: 500);
             }
         }
@@ -92,8 +91,7 @@ namespace SocialAppAPI.Controllers
             catch (Exception ex)
             {
                 // If an exception occurs, log the error and return a Problem response
-                var message = new ErrorModel(Error, ex.Message).ToString();
-                return Problem(message,
+                return Problem(ex.Message,
                     statusCode: 500);
             }
         }
